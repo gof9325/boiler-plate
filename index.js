@@ -2,6 +2,9 @@ const express = require('express'); // express 모듈을 가지고온다
 const app = express(); // 펑션을 이용해서 새로운 앱을 생성 
 const port = 5000 // 포트
 const bodyParser = require("body-parser")
+
+const config = require('./config/key')
+
 const { User } = require('./models/User');
 
  // application/x-www-form-urlencoded
@@ -12,7 +15,7 @@ const { User } = require('./models/User');
  //app.use(express.json());
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://kyungwon:abcd1234@boilerplate.dg2la.mongodb.net/boilerplate?retryWrites=true&w=majority', {
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 }).then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err))
