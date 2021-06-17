@@ -2,7 +2,7 @@ const express = require('express'); // express 모듈을 가지고온다
 const app = express(); // 펑션을 이용해서 새로운 앱을 생성 
 const port = 5000 // 포트
 const bodyParser = require("body-parser")
-
+const cookieParser = require('cookie-parser');
 const config = require('./config/key')
 
 const { User } = require('./models/User');
@@ -11,7 +11,7 @@ const { User } = require('./models/User');
   app.use(bodyParser.urlencoded({extended: true}))
  // application/json
   app.use(bodyParser.json())
-
+  app.use(cookieParser());
  //app.use(express.json());
 
 const mongoose = require('mongoose');
@@ -58,7 +58,13 @@ app.get('/', (req, res) => { // 루트 디렉토리에 Hello world를 실행
       return res.json({ loginSuccess: false, message: "비밀번호가 틀렸습니다."})
   // 비밀번호 까지 맞다면 토큰을 생성하기
     user.generateToken((err, user) => {
-      
+      if(err) return res.status(400).send(err);
+
+      // 토큰을 저장한다. 쿠키, 로컬스토리지, 세션
+      res.cookie("x_auth", user.token)
+      .status(200)
+      .json({ loginSuccess : true, userId: user._id})
+
     })
 
   })
