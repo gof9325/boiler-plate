@@ -1,3 +1,5 @@
+import Axios from 'axios'
+import { response } from 'express'
 import React, { useState } from 'react'
 
 function LoginPage() {
@@ -14,7 +16,18 @@ function LoginPage() {
     }
 
     const onSubmitHandler = (event) => {
-        
+        event.preventDefault(); // 페이지 리프레시를 막아준다.
+
+        console.log('Email', Email)
+        console.log('Password', Password)
+
+        let body = {
+            email: Email,
+            password: Password
+        }
+
+        Axios.post('/api/user/login',body)
+        .then(response)
     }
 
     return (
